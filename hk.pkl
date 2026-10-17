@@ -1,0 +1,40 @@
+amends "package://github.com/jdx/hk/releases/download/v2.7.0/hk@2.7.0#/Config.pkl"
+
+import "package://github.com/jdx/hk/releases/download/v2.7.0/hk@2.7.0#/Builtins.pkl"
+
+steps {
+  ["hk-validate"] {
+    check = new CommandSpec {
+      command = "hk validate --deny-warnings"
+      effect = "read"
+    }
+  }
+  ["shell-tests"] {
+    check = new CommandSpec {
+      command = "mise run hooks:test"
+      effect = "read"
+    }
+  }
+  ["terraform"] = Builtins.terraform
+  ["oxfmt"] = (Builtins.oxfmt) {
+    glob = List("**/*.md", "**/*.markdown")
+  }
+  ["pkl-format"] = Builtins.pkl_format
+  ["trailing-whitespace"] = Builtins.trailing_whitespace
+  ["final-newline"] = Builtins.newlines
+}
+
+hooks {
+  ["commit-msg"] {
+    steps {
+      ["check-conventional-commit"] {
+        check = new CommandSpec {
+          command = new Command {
+            argv = List("mise", "run", "hooks:check-commit-message", "{{commit_msg_file}}")
+          }
+          effect = "read"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+#!/bin/sh
+#MISE description="Check commit-message types and scopes"
+#USAGE arg "<message-file>" help="Path to the Git commit-message file"
+set -eu
+
+message_file=${usage_message_file:?}
+hk util check-conventional-commit --allowed-types chore,feat,fix,revert,style "$message_file"
+
+# Match hk's exemptions before applying the additional scope rules.
+LC_ALL=C awk '
+  /^#/ { next }
+  {
+    if ($0 ~ /^(fixup! |squash! |amend! |Merge pull request |Revert ")/ ||
+        $0 ~ /^Merge (branch|branches|tag|tags|commit|remote-tracking branch|remote-tracking branches) '\''/)
+      exit 0
+
+    if (!match($0, /^[a-z]+\([^)]*\)/))
+      exit 0
+
+    scopes = substr($0, 1, RLENGTH - 1)
+    sub(/^[^(]*\(/, "", scopes)
+    count = split(scopes, names, ",")
+    for (i = 1; i <= count; i++) {
+      if (names[i] !~ /^[a-z][a-z0-9-]*$/ ||
+          (i > 1 && names[i - 1] >= names[i])) {
+        print "Invalid scopes: use unique lowercase names, comma-separated in alphabetical order, without spaces." > "/dev/stderr"
+        exit 1
+      }
+    }
+    exit 0
+  }
+' "$message_file"
