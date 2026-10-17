@@ -1,0 +1,23 @@
+[tools]
+gh = "2.102.0"
+terraform = "1.16.6"
+
+[tasks."infra:login"]
+description = "Log in to HCP Terraform"
+raw = true
+run = "terraform login"
+
+[tasks."infra:github:init"]
+description = "Initialize Terraform for GitHub repository management"
+raw = true
+run = "terraform -chdir=infra/github init"
+
+[tasks."infra:github:plan"]
+description = "Preview GitHub repository configuration changes"
+raw = true
+run = "terraform -chdir=infra/github plan"
+
+[tasks."infra:github:apply"]
+description = "Apply GitHub repository configuration changes after confirmation"
+raw = true
+run = "terraform -chdir=infra/github apply"
