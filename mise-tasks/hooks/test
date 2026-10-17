@@ -1,0 +1,5 @@
+#!/bin/sh
+#MISE description="Test commit-message validation"
+set -eu
+
+exec bats tests
