@@ -16,9 +16,7 @@ steps {
     }
   }
   ["terraform"] = Builtins.terraform
-  ["oxfmt"] = (Builtins.oxfmt) {
-    glob = List("**/*.md", "**/*.markdown", "**/*.ts", "**/*.json", "**/*.jsonc")
-  }
+  ["oxfmt"] = Builtins.oxfmt
   ["package-typecheck"] {
     check = new CommandSpec {
       command = "npm run typecheck"
