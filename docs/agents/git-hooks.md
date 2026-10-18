@@ -45,7 +45,8 @@ Install package development dependencies with `npm ci` before running checks or 
 To format a Markdown file manually, run `oxfmt --write <file.md>`.
 Pkl uses the formatter's default grammar, which hk's embedded evaluator supports.
 To format the hook configuration manually, run `pkl format --write hk.pkl`.
-These local hooks are bypassable and are not enforced by CI.
+These local hooks are bypassable, but the Woodpecker pipeline also runs their file checks through `mise run check`.
+The CI pipeline does not validate PR titles or commit messages; the Bats tests validate the commit-message checker itself.
 
 ## Commit messages
 
