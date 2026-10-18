@@ -1,13 +1,15 @@
-variable "woodpecker_pr_status_context" {
-  description = "Observed Woodpecker PR status context. Leave null until the CI rollout has been verified."
-  type        = string
-  default     = null
+variable "woodpecker_pr_status_contexts" {
+  description = "Observed Woodpecker PR status contexts for every workflow. Leave empty until the CI rollout has been verified."
+  type        = set(string)
+  default     = []
+  nullable    = false
 
   validation {
-    condition = var.woodpecker_pr_status_context == null ? true : (
-      length(trimspace(var.woodpecker_pr_status_context)) > 0 &&
-      var.woodpecker_pr_status_context == trimspace(var.woodpecker_pr_status_context)
-    )
-    error_message = "Use null or an observed status context without leading or trailing whitespace."
+    condition = alltrue([
+      for context in var.woodpecker_pr_status_contexts : context == null ? false : (
+        length(trimspace(context)) > 0 && context == trimspace(context)
+      )
+    ])
+    error_message = "Use observed status contexts without empty values or leading or trailing whitespace."
   }
 }

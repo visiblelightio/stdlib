@@ -23,13 +23,17 @@ resource "github_repository_ruleset" "main" {
       required_approving_review_count = 0
     }
 
-    # Enable only after a real PR verifies the instance's status context.
+    # Enable only after a real PR verifies every workflow's status context.
     dynamic "required_status_checks" {
-      for_each = var.woodpecker_pr_status_context == null ? [] : [var.woodpecker_pr_status_context]
+      for_each = length(var.woodpecker_pr_status_contexts) == 0 ? [] : [var.woodpecker_pr_status_contexts]
 
       content {
-        required_check {
-          context = required_status_checks.value
+        dynamic "required_check" {
+          for_each = required_status_checks.value
+
+          content {
+            context = required_check.value
+          }
         }
       }
     }
