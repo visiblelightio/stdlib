@@ -82,14 +82,17 @@ Documentation, tests, and measurements must establish its behavior and benefit.
 - Importing a utility includes only that utility and its dependencies, with no unrelated runtime code or import-time side effects.
   Verify this with bundle tests.
 - Do not ship compatibility fallbacks or polyfills for older environments.
-- Support the latest Node.js LTS release, current Cloudflare Workers, and current stable browsers.
-  Do not wait for the Web Platform Baseline Widely available window.
+- Support the latest Node.js LTS release, current Cloudflare Workers, and the Web Platform Baseline Widely available feature set.
+  The latter covers features interoperable across the core browsers for at least 30 months.
 - General-purpose utilities must work in Cloudflare Workers without assuming Node.js-specific APIs.
   Workers compatibility dates and any platform-specific compatibility flags remain to be defined.
-- Compile to the latest numbered ECMAScript target supported by the pinned TypeScript compiler, currently ES2025.
-  Consumers targeting older environments handle syntax transpilation and any required API polyfills.
-  A bundler's syntax transformations do not imply that it supplies API polyfills.
-- Compatibility follows current runtime releases rather than a fixed historical minimum.
+- Compile with tsdown's `baseline-widely-available` browser target.
+  Review its resolved browser versions when upgrading the build tool.
+  Use ES2022 source API types as a conservative guard and verify each runtime API's Baseline status separately.
+  Syntax transformations do not supply API polyfills.
+  Consumers do not need to transpile the package for the supported browser set; older targets remain their responsibility.
+- Raise minimum environment requirements through major releases when justified.
+  Do not preserve a fixed compatibility baseline indefinitely.
   Document platform-specific API requirements when adding utilities.
 
 ## Testing and benchmarks

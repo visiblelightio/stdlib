@@ -58,7 +58,7 @@ void empty;
       join(directory, "tsconfig.json"),
       JSON.stringify({
         compilerOptions: {
-          target: "ES2025",
+          target: "ES2022",
           module: "NodeNext",
           strict: true,
           noUncheckedIndexedAccess: true,
@@ -67,7 +67,7 @@ void empty;
           noUncheckedSideEffectImports: true,
           noEmit: true,
           types: [],
-          lib: ["ES2025"],
+          lib: ["ES2022"],
         },
         include: ["consumer.mts"],
       }),

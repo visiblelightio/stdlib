@@ -13,10 +13,17 @@ Only the root import, `@visiblelightio/stdlib`, is public initially.
 Internal file paths are not supported imports.
 
 Consumers need TypeScript 7 or newer.
-Runtime support follows current Node.js LTS, Cloudflare Workers, and stable browsers.
-Output targets ES2025, the latest numbered target supported by the pinned compiler.
-Consumers targeting older environments must configure transpilation and supply any required API polyfills.
-Bundlers do not necessarily provide polyfills.
+Runtime support covers current Node.js LTS, Cloudflare Workers, and the [Web Platform Baseline Widely available](https://web.dev/baseline) feature set.
+Widely available features have been interoperable across Baseline's core browsers for at least 30 months.
+tsdown uses its [`baseline-widely-available` target](https://tsdown.dev/options/target), rather than the latest ECMAScript edition.
+The pinned tsdown version resolves this preset to Chrome and Edge 111, Firefox 114, and Safari and iOS 16.4.
+Review changes to that browser set when upgrading tsdown.
+
+Source typechecking and the package-consumption test use ES2022 API types as a conservative guard, not a complete Baseline check.
+Check each runtime API's Baseline status before using it; syntax lowering does not supply API polyfills.
+The library does not ship polyfills or require consumers to transpile it for the supported browser set.
+Consumers targeting older environments handle any additional transpilation and polyfills.
+Development tooling uses the pinned Node.js version and has a separate TypeScript configuration.
 
 ## Development
 
