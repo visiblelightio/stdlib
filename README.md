@@ -1,0 +1,88 @@
+# @visiblelightio/stdlib
+
+Runtime and type-only utilities for modern, strict TypeScript projects.
+Licensed under MIT.
+
+This package is being initialized and does not export any utilities yet.
+See [the project goals](docs/goals.md) for admission criteria and release requirements.
+
+## Compatibility
+
+The package publishes native ESM and TypeScript declarations, with no CommonJS build or runtime dependencies.
+Only the root import, `@visiblelightio/stdlib`, is public initially.
+Internal file paths are not supported imports.
+
+Consumers need TypeScript 7 or newer.
+Runtime support follows current Node.js LTS, Cloudflare Workers, and stable browsers.
+Output targets ES2025, the latest numbered target supported by the pinned compiler.
+Consumers targeting older environments must configure transpilation and supply any required API polyfills.
+Bundlers do not necessarily provide polyfills.
+
+## Development
+
+Install [mise](https://mise.jdx.dev/), review the repository configuration, then run:
+
+```sh
+mise trust
+mise install
+mise exec -- npm ci
+mise run check
+```
+
+With mise shell integration enabled, the following commands use the pinned tools directly.
+Otherwise, prefix them with `mise exec --`.
+See [the hook instructions](docs/agents/git-hooks.md) for setup details and commit conventions.
+
+```sh
+npm run build
+npm run typecheck
+npm run lint
+npm run format
+npm test
+npm run dev
+```
+
+tsdown preserves individual modules and generates declarations through Oxc.
+TypeScript checks source and tooling separately.
+Exported declarations require explicit annotations where `isolatedDeclarations` requires them.
+General-purpose source has no ambient Node.js or DOM types.
+
+Oxfmt is managed by mise, not installed as a package dependency.
+Oxlint uses correctness rules, rejects warnings, and makes no automatic fixes.
+Development dependencies use exact versions and a committed npm lockfile.
+Dependency install scripts are disabled unless explicitly reviewed and allowed.
+
+## Validation
+
+`mise run check` runs package validation and the existing repository hook checks.
+No hosted CI provider is configured, and GitHub Actions remains disabled.
+Local checks and hooks are bypassable.
+
+The Vitest package-consumption test builds an npm archive, installs it into an isolated temporary project, and checks ESM imports, strict TypeScript resolution, and blocked internal imports.
+It does not establish browser or Workers compatibility.
+It checks that the initial package has no runtime dependencies and no public utility exports.
+Update the empty-export assertions when adding the first utility.
+
+Utility coverage gates, property tests, bundle-exclusion tests, benchmarks, and version-matched API documentation remain release requirements.
+The empty package does not claim to satisfy those requirements.
+
+## Publishing
+
+Changesets records release notes and versions without automatically committing changes.
+Keep version preparation separate from publication:
+
+```sh
+npm run changeset
+npm run version-packages
+mise run check
+# Review and commit the version changes before publishing.
+npm run release
+```
+
+Publishing requires npm authorization for the `@visiblelightio` scope.
+Public access is configured explicitly.
+`prepublishOnly` runs package validation before publication, and `prepack` rebuilds the package.
+The archive includes compiled modules, declarations, available source and declaration maps, TypeScript source, this README, and the license.
+The empty entry point produces no maps; map generation applies once there is code or a declaration to map.
+
+Initialization does not publish a release.

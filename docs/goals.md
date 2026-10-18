@@ -77,18 +77,20 @@ Documentation, tests, and measurements must establish its behavior and benefit.
 - Publish native ESM and TypeScript declarations.
   Do not maintain a separate CommonJS build.
 - Require TypeScript 7 or newer.
-  Exact supported compiler options remain to be defined beyond strict mode.
+  Library source uses strict checking, unchecked indexed access checks, exact optional properties, explicit overrides, and isolated declarations.
+  Resolve modules with NodeNext and exclude ambient DOM and Node.js types from general-purpose source.
 - Importing a utility includes only that utility and its dependencies, with no unrelated runtime code or import-time side effects.
   Verify this with bundle tests.
 - Do not ship compatibility fallbacks or polyfills for older environments.
-- Support the latest Node.js LTS release, Cloudflare Workers, and the Web Platform Baseline Widely available feature set.
-  The latter covers features interoperable across the core browsers for at least 30 months.
+- Support the latest Node.js LTS release, current Cloudflare Workers, and current stable browsers.
+  Do not wait for the Web Platform Baseline Widely available window.
 - General-purpose utilities must work in Cloudflare Workers without assuming Node.js-specific APIs.
   Workers compatibility dates and any platform-specific compatibility flags remain to be defined.
-- Choose concrete minimum environments first, then derive the newest ECMAScript target fully supported by them.
-  Account for both syntax and built-in APIs.
-- Raise minimum environment requirements through major releases when justified.
-  Do not preserve a fixed compatibility baseline indefinitely.
+- Compile to the latest numbered ECMAScript target supported by the pinned TypeScript compiler, currently ES2025.
+  Consumers targeting older environments handle syntax transpilation and any required API polyfills.
+  A bundler's syntax transformations do not imply that it supplies API polyfills.
+- Compatibility follows current runtime releases rather than a fixed historical minimum.
+  Document platform-specific API requirements when adding utilities.
 
 ## Testing and benchmarks
 
@@ -139,8 +141,7 @@ Documentation, tests, and measurements must establish its behavior and benefit.
 
 These need explicit decisions before their corresponding release gates can be implemented:
 
-- Exact supported TypeScript compiler options beyond strict mode.
-- Concrete versions satisfying the runtime and browser policies, Workers compatibility dates and flags, and the resulting ECMAScript target.
+- Workers compatibility dates and flags needed by actual platform-specific utilities.
 - Coverage instrumentation scope and treatment of unreachable code.
 - Representative benchmark fixtures with the first utilities, followed by regression thresholds and numerical budgets informed by observed variability and real consumer workloads.
 

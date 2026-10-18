@@ -3,6 +3,7 @@ bats = "1.14.0"
 gh = "2.102.0"
 hk = "2.7.0"
 node = "24.22.0"
+npm = "12.2.0"
 oxfmt = "0.73.0"
 pkl = "0.32.1"
 terraform = "1.16.6"
@@ -14,6 +15,10 @@ postinstall = "hk install --mise"
 [tasks."hooks:install"]
 description = "Install repository-local Git hooks"
 run = "hk install --mise"
+
+[tasks.check]
+description = "Validate package and repository checks"
+run = "npm run check && hk check --all"
 
 [tasks."infra:login"]
 description = "Log in to HCP Terraform"

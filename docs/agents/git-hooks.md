@@ -21,13 +21,16 @@ Hook-install failures appear as mise warnings; rerun the explicit task to diagno
 
 ## File checks
 
-Pre-commit automatically fixes Terraform, Pkl, and Markdown formatting, trailing whitespace, and final newlines in staged files, then stages the fixes.
+Pre-commit automatically fixes Terraform, Pkl, Markdown, TypeScript, and JSON formatting, trailing whitespace, and final newlines in staged files, then stages the fixes.
 It temporarily stashes unstaged changes and restores them afterward.
 If another check fails, formatting fixes may remain in the working tree and index.
 Review the fixes and resolve remaining errors before retrying.
 
 Pre-commit also runs the Bats-core shell tests and `hk validate --deny-warnings`.
 Both run on every commit, regardless of which files changed, and are included in `hk check --all`.
+Package typechecking also runs on every commit, and Oxlint runs when TypeScript files change.
+Oxlint rejects warnings and does not automatically fix code.
+Run `mise run check` for package tests and formatting checks as well as all hook checks.
 
 To check the whole checkout without changing files:
 
@@ -36,8 +39,9 @@ hk check --all
 ```
 
 Terraform formatting does not require initialization or provider downloads.
-Oxfmt formats Markdown files, including table alignment.
-Node.js is pinned through mise because Oxfmt's npm distribution requires it.
+Oxfmt formats Markdown, TypeScript, and JSON files, including Markdown table alignment.
+Node.js and npm are pinned separately through mise.
+Install package development dependencies with `npm ci` before running checks or committing.
 To format a Markdown file manually, run `oxfmt --write <file.md>`.
 Pkl uses the formatter's default grammar, which hk's embedded evaluator supports.
 To format the hook configuration manually, run `pkl format --write hk.pkl`.
