@@ -10,11 +10,11 @@ They use an official mise Debian image pinned by version and multi-platform dige
 Workflows that run package commands also install npm dependencies with `npm ci`.
 Together they cover the same checks as `mise run check`:
 
-- `typecheck` checks source and tooling types.
-- `lint` runs Oxlint.
-- `format` checks Oxfmt, Terraform and Pkl formatting, trailing whitespace, and final newlines.
-- `tests` runs the package-consumption test and Bats commit-message regression tests.
-- `hooks` validates the hook configuration with warnings denied.
+- `Typecheck` checks source and tooling types.
+- `Lint` runs Oxlint.
+- `Format` checks Oxfmt, Terraform and Pkl formatting, trailing whitespace, and final newlines.
+- `Tests` runs the package-consumption test and Bats commit-message regression tests.
+- `Hooks` validates the hook configuration with warnings denied.
 
 There are no workflow dependencies, so a lint failure does not prevent tests or other checks from running.
 Each workflow has its own checkout and tool installation; this trades repeated setup for independent results without shared build state.
@@ -30,6 +30,20 @@ To lint the workflows with a Woodpecker 3.19 CLI:
 ```sh
 woodpecker-cli lint .woodpecker/*.yaml
 ```
+
+## GitHub status names
+
+Use the workflow names alone as GitHub status contexts: `Typecheck`, `Lint`, `Format`, `Tests`, and `Hooks`.
+Woodpecker derives workflow names from the case-sensitive YAML filenames, not the step names.
+To remove the default `ci/woodpecker/pr/` prefix, configure this environment variable on the Woodpecker server and redeploy it:
+
+```yaml
+WOODPECKER_STATUS_CONTEXT_FORMAT: "{{ .workflow }}"
+```
+
+This server-wide setting affects every repository on the instance and cannot be configured in this repository's workflow YAML.
+PR and push runs will use the same status names; runs for the same commit SHA update the same GitHub status contexts.
+Verify the final names before configuring required statuses, and update any existing requirements when changing names.
 
 ## Activate and verify
 
@@ -58,8 +72,9 @@ The rollout is incomplete until every verified PR status is required on `main`.
 `woodpecker_pr_status_contexts` in `infra/github/variables.tf` defaults to an empty set only to avoid blocking merges before the instance is configured and verified.
 
 1. Read the exact PR status contexts from actual runs of all five workflows.
-   Woodpecker's defaults are `ci/woodpecker/pr/typecheck`, `ci/woodpecker/pr/lint`, `ci/woodpecker/pr/format`, `ci/woodpecker/pr/tests`, and `ci/woodpecker/pr/hooks`, but the instance can override them.
-   Do not use the separate push statuses under `ci/woodpecker/push/`.
+   With the server format above, require `Typecheck`, `Lint`, `Format`, `Tests`, and `Hooks`.
+   If the server still uses its default format, the contexts will instead have the `ci/woodpecker/pr/` prefix.
+   Configure the server format first so those prefixed names do not become required.
 2. In a follow-up PR, change the variable's committed default from `[]` to the complete set of observed PR contexts.
    Keeping these values in Git avoids relying on a one-off local override for future Terraform runs.
 3. Run `mise run infra:github:plan`, review the required-status change, and apply it with `mise run infra:github:apply` after confirmation.
