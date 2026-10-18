@@ -16,8 +16,19 @@ steps {
     }
   }
   ["terraform"] = Builtins.terraform
-  ["oxfmt"] = (Builtins.oxfmt) {
-    glob = List("**/*.md", "**/*.markdown")
+  ["oxfmt"] = Builtins.oxfmt
+  ["package-typecheck"] {
+    check = new CommandSpec {
+      command = "npm run typecheck"
+      effect = "read"
+    }
+  }
+  ["oxlint"] {
+    glob = List("**/*.ts")
+    check = new CommandSpec {
+      command = "npm run lint"
+      effect = "read"
+    }
   }
   ["pkl-format"] = Builtins.pkl_format
   ["trailing-whitespace"] = Builtins.trailing_whitespace

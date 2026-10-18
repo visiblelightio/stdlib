@@ -1,0 +1,55 @@
+{
+  "name": "@visiblelightio/stdlib",
+  "version": "0.0.0",
+  "description": "Runtime and type-only utilities for modern, strict TypeScript projects.",
+  "homepage": "https://github.com/visiblelightio/stdlib#readme",
+  "bugs": {
+    "url": "https://github.com/visiblelightio/stdlib/issues"
+  },
+  "license": "MIT",
+  "author": "Visible Light",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/visiblelightio/stdlib.git"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.tools.json",
+    "lint": "oxlint --deny-warnings",
+    "format": "oxfmt --write .",
+    "format:check": "oxfmt --check .",
+    "test": "vitest run",
+    "dev": "vitest",
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm test",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run check",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "3.0.3",
+    "@types/node": "24.19.2",
+    "oxlint": "1.88.0",
+    "tsdown": "0.23.1",
+    "typescript": "7.0.2",
+    "vitest": "5.0.5"
+  },
+  "packageManager": "npm@12.2.0"
+}
