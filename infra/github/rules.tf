@@ -23,7 +23,7 @@ resource "github_repository_ruleset" "main" {
       required_approving_review_count = 0
     }
 
-    # Enable only after a real PR verifies every workflow's status context.
+    # Require every observed PR workflow status, without adding bypass actors.
     dynamic "required_status_checks" {
       for_each = length(var.woodpecker_pr_status_contexts) == 0 ? [] : [var.woodpecker_pr_status_contexts]
 

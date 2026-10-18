@@ -33,16 +33,16 @@ woodpecker-cli lint .woodpecker/*.yaml
 
 ## GitHub status names
 
-Use the workflow names alone as GitHub status contexts: `Typecheck`, `Lint`, `Format`, `Tests`, and `Hooks`.
+The instance reports `Typecheck (pr)`, `Lint (pr)`, `Format (pr)`, `Tests (pr)`, and `Hooks (pr)` as GitHub status contexts.
 Woodpecker derives workflow names from the case-sensitive YAML filenames, not the step names.
 To remove the default `ci/woodpecker/pr/` prefix, configure this environment variable on the Woodpecker server and redeploy it:
 
 ```yaml
-WOODPECKER_STATUS_CONTEXT_FORMAT: "{{ .workflow }}"
+WOODPECKER_STATUS_CONTEXT_FORMAT: "{{ .workflow }} ({{ .event }})"
 ```
 
 This server-wide setting affects every repository on the instance and cannot be configured in this repository's workflow YAML.
-PR and push runs will use the same status names; runs for the same commit SHA update the same GitHub status contexts.
+The event suffix keeps PR statuses separate from push statuses for the same commit SHA.
 Verify the final names before configuring required statuses, and update any existing requirements when changing names.
 
 ## Activate and verify
@@ -68,14 +68,14 @@ These settings are outside this repository's GitHub Terraform configuration.
 
 ## Require passing PR CI
 
-The rollout is incomplete until every verified PR status is required on `main`.
-`woodpecker_pr_status_contexts` in `infra/github/variables.tf` defaults to an empty set only to avoid blocking merges before the instance is configured and verified.
+`woodpecker_pr_status_contexts` in `infra/github/variables.tf` contains the five PR contexts observed on GitHub.
+Applying the GitHub Terraform configuration makes every context required on `main`.
 
 1. Read the exact PR status contexts from actual runs of all five workflows.
-   With the server format above, require `Typecheck`, `Lint`, `Format`, `Tests`, and `Hooks`.
+   With the server format above, require `Typecheck (pr)`, `Lint (pr)`, `Format (pr)`, `Tests (pr)`, and `Hooks (pr)`.
    If the server still uses its default format, the contexts will instead have the `ci/woodpecker/pr/` prefix.
    Configure the server format first so those prefixed names do not become required.
-2. In a follow-up PR, change the variable's committed default from `[]` to the complete set of observed PR contexts.
+2. When changing workflow names or the server format, update the variable's committed default to the complete set of observed PR contexts through a PR.
    Keeping these values in Git avoids relying on a one-off local override for future Terraform runs.
 3. Run `mise run infra:github:plan`, review the required-status change, and apply it with `mise run infra:github:apply` after confirmation.
 4. Verify that any failing or pending PR workflow status blocks merging, including for administrators.

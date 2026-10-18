@@ -1,8 +1,14 @@
 variable "woodpecker_pr_status_contexts" {
-  description = "Observed Woodpecker PR status contexts for every workflow. Leave empty until the CI rollout has been verified."
+  description = "Observed Woodpecker PR status contexts required to merge into main."
   type        = set(string)
-  default     = []
-  nullable    = false
+  default = [
+    "Format (pr)",
+    "Hooks (pr)",
+    "Lint (pr)",
+    "Tests (pr)",
+    "Typecheck (pr)",
+  ]
+  nullable = false
 
   validation {
     condition = alltrue([
