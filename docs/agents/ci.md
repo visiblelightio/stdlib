@@ -2,7 +2,7 @@
 
 When adding or changing checks, keep `.woodpecker/` workflows aligned with the checks covered by `mise run check`.
 Keep check categories independent so a failure in one does not prevent the others from running.
-See [ADR 0001](../adr/0001-woodpecker-ci-pilot.md) for the CI scope and no-bypass decision.
+See [ADR 0001](../adr/0001-woodpecker-ci.md) for the CI scope and no-bypass decision.
 
 ## Renaming workflows
 
