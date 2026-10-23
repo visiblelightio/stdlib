@@ -9,8 +9,5 @@ Each workflow reports its own GitHub status so a failure in one category does no
 Require manual approval before running fork pull requests, and keep PR validation free of publishing and deployment credentials.
 Publishing and deployment remain outside the pilot.
 
-Passing statuses from every PR CI workflow will be required to merge, with no bypass.
-CI outages will therefore block merges; this is an accepted trade-off.
-
-This records the accepted decision, not a completed rollout.
-Before requiring the statuses, verify the agent environment, fork approval behavior, successful and failing PR runs, and the actual GitHub status contexts reported by the instance.
+Passing statuses from every PR CI workflow are required to merge, with no bypass.
+CI outages therefore block merges; this is an accepted trade-off.

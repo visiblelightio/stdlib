@@ -64,9 +64,9 @@ Dependency install scripts are disabled unless explicitly reviewed and allowed.
 `mise run check` runs package validation and the existing repository hook checks.
 [Woodpecker CI](https://ci.igas.dev) splits the same checks into independent typecheck, lint, format, tests, and hook-validation workflows on pull requests and pushes to `main`.
 Fork pull requests require manual approval before execution.
-See [the CI rollout instructions](docs/agents/ci.md) for activation and required-status setup.
+See [the CI maintenance instructions](docs/agents/ci.md) when changing workflows or required statuses.
 GitHub Actions remains disabled.
-Local checks and hooks are bypassable; the pilot requires every PR CI workflow to pass with no merge bypass once rollout verification is complete.
+Local checks and hooks are bypassable; every PR CI workflow must pass before merging, with no merge bypass.
 
 The Vitest package-consumption test builds an npm archive, installs it into an isolated temporary project, and checks ESM imports, strict TypeScript resolution, and blocked internal imports.
 It does not establish browser or Workers compatibility.
