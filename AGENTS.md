@@ -1,5 +1,9 @@
 ## Agent skills
 
+### Workflow
+
+Before implementation or review, read `docs/agents/workflow.md`.
+
 ### Markdown
 
 When creating or editing Markdown, use semantic line breaks to keep future diffs local.
