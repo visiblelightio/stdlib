@@ -21,8 +21,10 @@ resource "github_repository" "stdlib" {
   allow_forking          = true
   delete_branch_on_merge = true
 
-  merge_commit_title          = "PR_TITLE"
-  merge_commit_message        = "BLANK"
+  # Inactive while merge commits are disabled.
+  # Match GitHub defaults to avoid provider drift.
+  merge_commit_title          = "MERGE_MESSAGE"
+  merge_commit_message        = "PR_TITLE"
   squash_merge_commit_title   = "PR_TITLE"
   squash_merge_commit_message = "BLANK"
   web_commit_signoff_required = false
