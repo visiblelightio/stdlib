@@ -22,5 +22,20 @@ resource "github_repository_ruleset" "main" {
       # Require a PR without requiring another reviewer for solo development.
       required_approving_review_count = 0
     }
+
+    # Require every observed PR workflow status, without adding bypass actors.
+    dynamic "required_status_checks" {
+      for_each = length(var.woodpecker_pr_status_contexts) == 0 ? [] : [var.woodpecker_pr_status_contexts]
+
+      content {
+        dynamic "required_check" {
+          for_each = required_status_checks.value
+
+          content {
+            context = required_check.value
+          }
+        }
+      }
+    }
   }
 }
