@@ -7,6 +7,7 @@ npm = "12.2.0"
 oxfmt = "0.73.0"
 pkl = "0.32.1"
 terraform = "1.16.6"
+"github:woodpecker-ci/woodpecker" = { version = "3.19.0", matching = "woodpecker-cli_" }
 
 [hooks]
 enter = { task = "hooks:install" }
@@ -19,6 +20,10 @@ run = "hk install --mise"
 [tasks.check]
 description = "Validate package and repository checks"
 run = "npm run check && hk check --all"
+
+[tasks."ci:lint"]
+description = "Validate Woodpecker workflows"
+run = "woodpecker-cli lint --strict .woodpecker"
 
 [tasks."infra:login"]
 description = "Log in to HCP Terraform"

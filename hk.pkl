@@ -9,6 +9,12 @@ steps {
       effect = "read"
     }
   }
+  ["woodpecker-lint"] {
+    check = new CommandSpec {
+      command = "mise run ci:lint"
+      effect = "read"
+    }
+  }
   ["shell-tests"] {
     check = new CommandSpec {
       command = "mise run hooks:test"

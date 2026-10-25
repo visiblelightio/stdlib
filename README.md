@@ -61,7 +61,7 @@ Dependency install scripts are disabled unless explicitly reviewed and allowed.
 
 ## Validation
 
-`mise run check` runs package validation and the existing repository hook checks.
+`mise run check` runs package validation and repository hook checks, including Woodpecker workflow linting with the mise-pinned CLI.
 [Woodpecker CI](https://ci.igas.dev) splits the same checks into independent typecheck, lint, format, tests, and hook-validation workflows on pull requests and pushes to `main`.
 Fork pull requests require manual approval before execution.
 See [the CI maintenance instructions](docs/agents/ci.md) when changing workflows or required statuses.
