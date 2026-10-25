@@ -13,8 +13,9 @@ Status formatting is controlled by the server outside this repository; do not as
 
 ## Validation
 
-After changing workflow YAML, run the Woodpecker linter in addition to `mise run check`:
+After changing workflow YAML, run `mise run check`, which includes Woodpecker workflow validation.
+For a focused check, use:
 
 ```sh
-woodpecker-cli lint .woodpecker/*.yaml
+mise run ci:lint
 ```

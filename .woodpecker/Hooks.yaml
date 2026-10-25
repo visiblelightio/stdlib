@@ -10,3 +10,4 @@ steps:
       - mise trust
       - mise install
       - mise exec -- hk validate --deny-warnings
+      - mise run ci:lint
